@@ -32,7 +32,7 @@
 
 ```bash
 # 1. Cloner le repo
-git clone https://github.com/YOUR_USERNAME/hikely.git
+git clone https://github.com/Vanrun-stack/hikely.git
 cd hikely
 
 # 2. Copier le fichier d'environnement
