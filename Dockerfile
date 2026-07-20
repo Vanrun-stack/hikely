@@ -67,6 +67,13 @@ COPY --from=builder --chown=nextjs:nodejs /app/apps/web/public                  
 COPY --from=builder --chown=nextjs:nodejs /app/apps/web/.next/static               ./apps/web/.next/static
 COPY --from=builder --chown=nextjs:nodejs /app/apps/web/prisma                     ./apps/web/prisma
 
+# Fix for Next.js 15 monorepo static files (CSS/JS 404s)
+# Next.js sometimes resolves .next/static from the workspace root instead of the project root.
+# We create symlinks at the root level to ensure they are found either way.
+RUN mkdir -p /app/.next && \
+    ln -s /app/apps/web/.next/static /app/.next/static && \
+    ln -s /app/apps/web/public /app/public
+
 # Pre-install Prisma CLI as root so nextjs user can run it
 RUN npm install -g prisma@5 --no-save && \
     # Pre-fetch engines so nextjs user doesn't need write access
