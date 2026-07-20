@@ -24,12 +24,12 @@ RUN corepack enable && corepack prepare pnpm@9.0.0 --activate
 
 WORKDIR /app
 
-# Copy dependencies from deps stage
-COPY --from=deps /app/node_modules ./node_modules
-
 # Copy source code
 COPY pnpm-workspace.yaml package.json pnpm-lock.yaml turbo.json ./
 COPY apps/web ./apps/web
+
+# Install dependencies (required for pnpm symlinks to work correctly)
+RUN pnpm install --frozen-lockfile --filter web...
 
 # Generate Prisma client
 RUN cd apps/web && npx prisma generate
