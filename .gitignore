@@ -17,8 +17,6 @@ coverage/
 # ─── Infra & Local Configs ────────────────────────────────────────
 claud.md
 docker-compose*.yml
-docker-entrypoint.sh
-infra/
 
 # ─── Prisma ───────────────────────────────────────────────────────
 prisma/migrations/
