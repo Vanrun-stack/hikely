@@ -39,12 +39,6 @@ ENV NEXT_TELEMETRY_DISABLED=1
 ENV DOCKER=1
 RUN pnpm --filter web build
 
-# Debug: show standalone structure so we know where server.js lands
-RUN echo "=== Standalone structure ==" && \
-    find /app/apps/web/.next/standalone -name "server.js" 2>/dev/null && \
-    echo "=== Root of standalone ==" && \
-    ls -la /app/apps/web/.next/standalone/ 2>/dev/null || echo "No standalone dir"
-
 # ─── Stage 3: Production ─────────────────────────────────────────
 FROM node:22-alpine AS runner
 
@@ -62,19 +56,16 @@ RUN addgroup --system --gid 1001 nodejs && \
     adduser  --system --uid 1001 nextjs
 
 # ─── Standalone output ────────────────────────────────────────────
-# In a pnpm monorepo, standalone is generated at:
-#   apps/web/.next/standalone/
-#     └── apps/web/
-#           ├── server.js      ← entry point
-#           └── .next/
-#                └── server/
-# Public + static must mirror that path inside the container.
-COPY --from=builder --chown=nextjs:nodejs /app/apps/web/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/apps/web/public           ./apps/web/public
-COPY --from=builder --chown=nextjs:nodejs /app/apps/web/.next/static     ./apps/web/.next/static
-
-# Prisma schema (for db push at startup)
-COPY --from=builder --chown=nextjs:nodejs /app/apps/web/prisma ./apps/web/prisma
+# Confirmed standalone structure (pnpm monorepo):
+#   standalone/ -> copied to /app/
+#     apps/web/server.js   <- entry point
+#     apps/web/.next/      <- server bundles
+#     node_modules/        <- bundled deps
+# public + static must sit next to server.js
+COPY --from=builder --chown=nextjs:nodejs /app/apps/web/.next/standalone           ./
+COPY --from=builder --chown=nextjs:nodejs /app/apps/web/public                     ./apps/web/public
+COPY --from=builder --chown=nextjs:nodejs /app/apps/web/.next/static               ./apps/web/.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/apps/web/prisma                     ./apps/web/prisma
 
 # Pre-install Prisma CLI as root so nextjs user can run it
 RUN npm install -g prisma@5 --no-save && \
@@ -93,5 +84,5 @@ HEALTHCHECK --interval=30s --timeout=5s --retries=3 --start-period=30s \
   CMD wget --no-verbose --tries=1 --spider http://localhost:3000 || exit 1
 
 ENTRYPOINT ["./docker-entrypoint.sh"]
-# Auto-discover server.js — works regardless of monorepo nesting level
-CMD ["sh", "-c", "exec node $(find /app -name server.js -not -path '*/node_modules/*' | head -1)"]
+# Confirmed path from debug: apps/web/server.js inside the standalone tree
+CMD ["node", "apps/web/server.js"]
