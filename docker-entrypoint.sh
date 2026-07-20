@@ -1,21 +1,23 @@
 #!/bin/sh
-# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-#  HIKELY â€” Docker Entrypoint
-#  Runs Prisma DB sync before starting the application
-# â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+# ═══════════════════════════════════════════════════════════════════
+#  HIKELY — Docker Entrypoint
+#  Syncs DB schema then starts the app
+# ═══════════════════════════════════════════════════════════════════
 
-set -e
+echo "🏔️  Hikely — Starting up..."
 
-echo "ðŸ”ï¸  Hikely â€” Starting up..."
-
-# Sync DB schema if DATABASE_URL is set
+# Sync DB schema if DATABASE_URL is set (non-fatal: DB may not be ready yet)
 if [ -n "$DATABASE_URL" ]; then
-  echo "ðŸ“¦ Syncing database schema..."
-  prisma db push --schema=./prisma/schema.prisma --skip-generate --accept-data-loss 2>&1 || \
-    echo "âš ï¸  DB sync failed (database may not be ready, will retry on next restart)"
+  echo "📦 Syncing database schema..."
+  prisma db push \
+    --schema=./apps/web/prisma/schema.prisma \
+    --skip-generate \
+    --accept-data-loss 2>&1 \
+    && echo "✅ DB schema synced" \
+    || echo "⚠️  DB sync failed — app will start anyway, retry on next restart"
 fi
 
-echo "ðŸš€ Starting Hikely on port ${PORT:-3000}..."
+echo "🚀 Starting Hikely on port ${PORT:-3000}..."
 
-# Execute the original CMD
+# Execute the CMD (node apps/web/server.js)
 exec "$@"
