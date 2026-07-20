@@ -91,4 +91,11 @@ jobs:
           cache-to: type=gha,mode=max
           platforms: linux/amd64
 
+      # ─── Mirror postgis → GHCR (évite Docker Hub sur le serveur) ──
+      - name: Mirror postgis to GHCR
+        run: |
+          docker pull postgis/postgis:17-3.5-alpine
+          docker tag  postgis/postgis:17-3.5-alpine ghcr.io/${{ github.repository_owner }}/postgis:17-3.5-alpine
+          docker push ghcr.io/${{ github.repository_owner }}/postgis:17-3.5-alpine
+
 
