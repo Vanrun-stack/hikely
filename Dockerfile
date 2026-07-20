@@ -39,6 +39,12 @@ ENV NEXT_TELEMETRY_DISABLED=1
 ENV DOCKER=1
 RUN pnpm --filter web build
 
+# Debug: show standalone structure so we know where server.js lands
+RUN echo "=== Standalone structure ==" && \
+    find /app/apps/web/.next/standalone -name "server.js" 2>/dev/null && \
+    echo "=== Root of standalone ==" && \
+    ls -la /app/apps/web/.next/standalone/ 2>/dev/null || echo "No standalone dir"
+
 # ─── Stage 3: Production ─────────────────────────────────────────
 FROM node:22-alpine AS runner
 
@@ -87,5 +93,5 @@ HEALTHCHECK --interval=30s --timeout=5s --retries=3 --start-period=30s \
   CMD wget --no-verbose --tries=1 --spider http://localhost:3000 || exit 1
 
 ENTRYPOINT ["./docker-entrypoint.sh"]
-# server.js is at apps/web/server.js inside the standalone tree
-CMD ["node", "apps/web/server.js"]
+# Auto-discover server.js — works regardless of monorepo nesting level
+CMD ["sh", "-c", "exec node $(find /app -name server.js -not -path '*/node_modules/*' | head -1)"]
