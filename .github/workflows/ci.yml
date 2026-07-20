@@ -91,26 +91,4 @@ jobs:
           cache-to: type=gha,mode=max
           platforms: linux/amd64
 
-  # ─── Deploy (SSH — optionnel, activé si secrets configurés) ────────
-  deploy:
-    name: Deploy to Production
-    runs-on: ubuntu-latest
-    needs: docker
-    # Skip entirely if SSH secrets are not configured (Dockge manual deploy)
-    if: |
-      github.ref == 'refs/heads/main' &&
-      github.event_name == 'push' &&
-      secrets.DEPLOY_HOST != ''
 
-    steps:
-      - name: Deploy via SSH
-        uses: appleboy/ssh-action@v1
-        with:
-          host: ${{ secrets.DEPLOY_HOST }}
-          username: ${{ secrets.DEPLOY_USER }}
-          key: ${{ secrets.DEPLOY_SSH_KEY }}
-          script: |
-            cd /opt/hikely
-            docker compose -f docker-compose.prod.yml pull app
-            docker compose -f docker-compose.prod.yml up -d --no-deps app
-            docker image prune -f
