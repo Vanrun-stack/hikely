@@ -12,6 +12,7 @@ WORKDIR /app
 # Copy workspace config + lockfile first (better cache)
 COPY pnpm-workspace.yaml package.json pnpm-lock.yaml ./
 COPY apps/web/package.json ./apps/web/package.json
+COPY apps/web/prisma ./apps/web/prisma
 
 # Install dependencies
 RUN pnpm install --frozen-lockfile --filter web...
