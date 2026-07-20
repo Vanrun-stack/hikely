@@ -84,5 +84,5 @@ HEALTHCHECK --interval=30s --timeout=5s --retries=3 --start-period=30s \
   CMD wget --no-verbose --tries=1 --spider http://localhost:3000 || exit 1
 
 ENTRYPOINT ["./docker-entrypoint.sh"]
-# Confirmed path from debug: apps/web/server.js inside the standalone tree
-CMD ["node", "apps/web/server.js"]
+# cd to apps/web so process.cwd() = /app/apps/web — Next.js finds .next/static correctly
+CMD ["sh", "-c", "cd /app/apps/web && exec node server.js"]
