@@ -1,0 +1,228 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+/* ── CSS Custom Properties — Hikely Brand ──────────────────────── */
+@layer base {
+  :root {
+    /* Core — Warm white base */
+    --background: oklch(0.985 0.002 80);
+    --foreground: oklch(0.175 0.015 60);
+    --card: oklch(0.995 0.001 80);
+    --card-foreground: oklch(0.175 0.015 60);
+    --popover: oklch(0.995 0.001 80);
+    --popover-foreground: oklch(0.175 0.015 60);
+
+    /* Primary — Forest Green */
+    --primary: oklch(0.52 0.17 150);
+    --primary-foreground: oklch(0.98 0.005 150);
+
+    /* Secondary */
+    --secondary: oklch(0.955 0.012 80);
+    --secondary-foreground: oklch(0.24 0.015 60);
+
+    /* Muted */
+    --muted: oklch(0.955 0.008 80);
+    --muted-foreground: oklch(0.52 0.015 60);
+
+    /* Accent — Amber/Sunset */
+    --accent: oklch(0.78 0.165 70);
+    --accent-foreground: oklch(0.22 0.06 55);
+
+    /* Destructive */
+    --destructive: oklch(0.577 0.245 27.325);
+    --destructive-foreground: oklch(0.985 0 0);
+
+    /* Borders */
+    --border: oklch(0.905 0.008 80);
+    --input: oklch(0.905 0.008 80);
+    --ring: oklch(0.52 0.17 150);
+    --radius: 0.75rem;
+
+    /* Chart */
+    --chart-1: oklch(0.52 0.17 150);
+    --chart-2: oklch(0.78 0.165 70);
+    --chart-3: oklch(0.60 0.20 30);
+    --chart-4: oklch(0.55 0.14 250);
+    --chart-5: oklch(0.65 0.18 330);
+
+    /* Sidebar */
+    --sidebar: oklch(0.975 0.003 80);
+    --sidebar-foreground: oklch(0.175 0.015 60);
+    --sidebar-primary: oklch(0.52 0.17 150);
+    --sidebar-primary-foreground: oklch(0.98 0.005 150);
+    --sidebar-accent: oklch(0.945 0.02 150);
+    --sidebar-accent-foreground: oklch(0.24 0.015 60);
+    --sidebar-border: oklch(0.905 0.008 80);
+    --sidebar-ring: oklch(0.52 0.17 150);
+  }
+
+  .dark {
+    /* Core — Deep earth dark */
+    --background: oklch(0.13 0.01 60);
+    --foreground: oklch(0.96 0.005 80);
+    --card: oklch(0.18 0.012 60);
+    --card-foreground: oklch(0.96 0.005 80);
+    --popover: oklch(0.18 0.012 60);
+    --popover-foreground: oklch(0.96 0.005 80);
+
+    /* Primary — Brighter green for dark mode */
+    --primary: oklch(0.65 0.20 150);
+    --primary-foreground: oklch(0.13 0.04 150);
+
+    /* Secondary */
+    --secondary: oklch(0.22 0.012 60);
+    --secondary-foreground: oklch(0.96 0.005 80);
+
+    /* Muted */
+    --muted: oklch(0.22 0.012 60);
+    --muted-foreground: oklch(0.65 0.012 80);
+
+    /* Accent */
+    --accent: oklch(0.78 0.165 70);
+    --accent-foreground: oklch(0.22 0.06 55);
+
+    /* Destructive */
+    --destructive: oklch(0.704 0.191 22.216);
+    --destructive-foreground: oklch(0.985 0 0);
+
+    /* Borders */
+    --border: oklch(1 0 0 / 10%);
+    --input: oklch(1 0 0 / 15%);
+    --ring: oklch(0.65 0.20 150);
+
+    /* Chart */
+    --chart-1: oklch(0.65 0.20 150);
+    --chart-2: oklch(0.78 0.165 70);
+    --chart-3: oklch(0.65 0.20 30);
+    --chart-4: oklch(0.60 0.14 250);
+    --chart-5: oklch(0.70 0.18 330);
+
+    /* Sidebar */
+    --sidebar: oklch(0.18 0.012 60);
+    --sidebar-foreground: oklch(0.96 0.005 80);
+    --sidebar-primary: oklch(0.65 0.20 150);
+    --sidebar-primary-foreground: oklch(0.13 0.04 150);
+    --sidebar-accent: oklch(0.22 0.012 60);
+    --sidebar-accent-foreground: oklch(0.96 0.005 80);
+    --sidebar-border: oklch(1 0 0 / 10%);
+    --sidebar-ring: oklch(0.65 0.20 150);
+  }
+
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 80px;
+    @apply font-sans;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { @apply bg-muted; }
+  ::-webkit-scrollbar-thumb { @apply bg-muted-foreground/30 rounded-full; }
+  ::-webkit-scrollbar-thumb:hover { @apply bg-muted-foreground/50; }
+
+  .theme {
+    --font-heading: var(--font-sans);
+    --font-sans: var(--font-sans);
+  }
+}
+
+/* ── Utilities ───────────────────────────────────────────────────── */
+@layer utilities {
+  /* Glassmorphism */
+  .glass {
+    @apply bg-white/70 dark:bg-card/70 backdrop-blur-lg border border-white/20 dark:border-border;
+  }
+
+  .glass-card {
+    @apply bg-white/80 dark:bg-card/80 backdrop-blur-xl border border-white/30 dark:border-border/30;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+  }
+
+  /* Text gradient */
+  .text-gradient-brand {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-emerald-400;
+  }
+
+  .text-gradient-warm {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-amber-500 to-primary;
+  }
+
+  /* Hike card hover */
+  .hike-card {
+    @apply transition-all duration-300 ease-out;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,.07);
+  }
+  .hike-card:hover {
+    @apply -translate-y-1;
+    box-shadow: 0 20px 25px -5px rgba(0,0,0,.10), 0 8px 10px -5px rgba(0,0,0,.05);
+  }
+
+  /* Difficulty badge colors */
+  .badge-very-easy { @apply bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400; }
+  .badge-easy      { @apply bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400; }
+  .badge-moderate  { @apply bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400; }
+  .badge-hard      { @apply bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400; }
+  .badge-expert    { @apply bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400; }
+
+  /* GPX blur lock */
+  .gpx-blur {
+    filter: blur(4px);
+    pointer-events: none;
+    user-select: none;
+  }
+
+  /* Container sizes */
+  .container-narrow  { @apply max-w-2xl mx-auto px-4 sm:px-6; }
+  .container-default { @apply max-w-6xl mx-auto px-4 sm:px-6 lg:px-8; }
+  .container-wide    { @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8; }
+}
+
+/* ── MapLibre overrides ──────────────────────────────────────────── */
+.maplibregl-map {
+  @apply font-sans;
+}
+
+.maplibregl-ctrl-attrib {
+  @apply text-xs;
+}
+
+.maplibregl-popup-content {
+  @apply !rounded-xl !shadow-lg !border !border-border !bg-card !p-0;
+}
+
+/* ── Animations ──────────────────────────────────────────────────── */
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse-ring {
+  0%   { transform: scale(1); opacity: 1; }
+  100% { transform: scale(2); opacity: 0; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%      { transform: translateY(-8px); }
+}

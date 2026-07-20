@@ -1,0 +1,39 @@
+# ─── Git ──────────────────────────────────────────────────────────
+.git
+.gitattributes
+
+# ─── Dependencies ─────────────────────────────────────────────────
+node_modules
+.pnpm-store
+
+# ─── Build artifacts ──────────────────────────────────────────────
+.next
+dist
+.turbo
+
+# ─── Environment / Secrets ────────────────────────────────────────
+.env
+.env.local
+.env.*.local
+
+# ─── IDE / OS ─────────────────────────────────────────────────────
+.vscode
+.idea
+.DS_Store
+Thumbs.db
+*.swp
+
+# ─── Docs / Misc ──────────────────────────────────────────────────
+README.md
+claud.md
+*.log
+coverage
+
+# ─── Old API (no longer used) ─────────────────────────────────────
+apps/api
+
+# ─── Infra files not needed in container ──────────────────────────
+infra/grafana
+infra/prometheus
+infra/opensearch
+infra/docker
