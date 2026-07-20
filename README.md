@@ -2,7 +2,7 @@
 
 > Découvrez, planifiez et partagez vos randonnées avec la communauté.
 
-[![CI/CD](https://github.com/YOUR_USERNAME/hikely/actions/workflows/ci.yml/badge.svg)](https://github.com/YOUR_USERNAME/hikely/actions)
+[![CI/CD](https://github.com/Vanrun-stack/hikely/actions/workflows/ci.yml/badge.svg)](https://github.com/Vanrun-stack/hikely/actions)
 
 ## 🚀 Stack Technique
 
